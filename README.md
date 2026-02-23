@@ -45,13 +45,13 @@ Each worker is an isolated Claude Code instance running in its own **git worktre
 **One-liner:**
 
 ```bash
-git clone https://github.com/USER/claude-swarm.git ~/.claude-swarm && ~/.claude-swarm/install.sh
+git clone https://github.com/DDX1/claude-swarm.git ~/.claude-swarm && ~/.claude-swarm/install.sh
 ```
 
 **Or from a local clone:**
 
 ```bash
-git clone https://github.com/USER/claude-swarm.git ~/projects/claude-swarm
+git clone https://github.com/DDX1/claude-swarm.git ~/projects/claude-swarm
 ~/projects/claude-swarm/install.sh
 ```
 

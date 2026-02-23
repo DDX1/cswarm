@@ -2,7 +2,7 @@
 # install.sh — Install Claude Swarm into ~/.claude/
 #
 # Usage:
-#   git clone https://github.com/USER/claude-swarm.git ~/.claude-swarm && ~/.claude-swarm/install.sh
+#   git clone https://github.com/DDX1/claude-swarm.git ~/.claude-swarm && ~/.claude-swarm/install.sh
 #   ./install.sh              Install (with preview)
 #   ./install.sh --yes        Install without confirmation
 #   ./install.sh --check      Verify installation
@@ -27,7 +27,7 @@ fail()    { printf "${RED}   fail${NC}  %s\n" "$1"; }
 step()    { printf "\n${BOLD}  %s${NC}\n" "$1"; }
 
 # ── Constants ────────────────────────────────────────────────────────────────
-REPO_URL="https://github.com/USER/claude-swarm.git"
+REPO_URL="https://github.com/DDX1/claude-swarm.git"
 INSTALL_DIR="$HOME/.claude-swarm"
 CLAUDE_DIR="$HOME/.claude"
 BACKUP_DIR="$CLAUDE_DIR/backups/swarm-$(date +%Y%m%d-%H%M%S)"
