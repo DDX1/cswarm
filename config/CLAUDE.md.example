@@ -1,0 +1,14 @@
+# Global Claude Code Instructions
+
+## Swarm Integration
+
+When using the swarm system:
+- Workers operate in isolated git worktrees — never manually edit files in `../*-worker-*` directories
+- Use `/swarm-status` to check progress, not `tmux attach` (unless you want to watch live)
+- Always run `/swarm-merge` before `/swarm-test` — test against merged code, not individual branches
+
+## Notes
+
+- Slash commands are defined in `~/.claude/commands/` — edit them to tune behavior
+- Re-run setup anytime: `bash ~/.claude/swarm/scripts/setup.sh`
+- Add a new command: create `~/.claude/commands/my-command.md` — available immediately

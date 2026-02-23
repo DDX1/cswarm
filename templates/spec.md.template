@@ -1,0 +1,93 @@
+# Task: <Human-Readable Task Name>
+
+<!-- One spec file per worker. Be specific — vague specs produce vague results. -->
+<!-- The worker reads this file as its primary instruction set. -->
+
+## Objective
+
+<2-3 sentences. What exactly must be accomplished by this worker and nothing more.
+Be concrete. "Add a vouchers feature" is bad. "Create the VoucherCard component at
+src/shared/components/vouchers/VoucherCard.tsx that renders a Voucher type from
+src/types/voucher.types.ts" is good.>
+
+---
+
+## Scope
+
+### Files to Create
+- `<path/to/new-file.ts>` — <purpose of this file>
+- `<path/to/new-file.tsx>` — <purpose of this file>
+
+### Files to Modify
+- `<path/to/existing-file.ts>` — <specifically: what to add, what to change, what NOT to change>
+- `<path/to/existing-file.tsx>` — <specifically: what to add>
+
+### Read for Patterns (do NOT modify)
+- `<path/to/reference.tsx>` — <what pattern or structure to copy from here>
+- `<path/to/types.ts>` — <what types are already defined here>
+
+### Off-Limits (never touch)
+- `<path>` — <reason>
+- `<path>` — <reason>
+
+---
+
+## Context
+
+<Background the worker needs to implement this correctly:>
+
+**Data shapes**: The `<TypeName>` type is already defined in `<file>`:
+```typescript
+// paste the relevant type here so the worker doesn't need to hunt for it
+```
+
+**Existing pattern to follow**: See `<reference file>` — the worker should replicate
+its structure (imports, component shape, export style, styling approach).
+
+**API / data source**: Data comes from `<source>`. The relevant function/hook is `<name>`.
+
+**Connection points**: This task's output will be consumed by `<other component/screen>`.
+The interface must match `<specific requirement>`.
+
+---
+
+## Acceptance Criteria
+
+- [ ] <Specific, verifiable criterion — can you check this by looking at the code?>
+- [ ] <Specific, verifiable criterion>
+- [ ] <Specific, verifiable criterion>
+- [ ] No TypeScript errors in files within scope (`npx tsc --noEmit`)
+- [ ] Follows existing patterns from reference files (no new libraries introduced)
+- [ ] All new files have proper named exports
+
+---
+
+## Technical Guidance
+
+- Use `<ExistingComponent>` as the base structural pattern for new components
+- Import theme values using `<theming approach, e.g., useTheme() from @shopify/restyle>`
+- The data type for `<X>` is `<TypeName>` — already defined at `<path>`
+- <Any non-obvious constraint or gotcha workers should know>
+- If you need a new dependency, check if something suitable already exists in package.json first
+
+---
+
+## Dependencies
+
+- **Requires output from**: none / `<other-task-slug>`: specifically needs `<what — e.g., "the Voucher type from voucher.types.ts">`
+- **Provides to**: none / `<other-task-slug>`: exports `<what — e.g., "VoucherCard component">`
+
+---
+
+## Completion Signal
+
+When **all acceptance criteria are met**, output exactly:
+```
+<promise><TASK_SLUG>_COMPLETE</promise>
+```
+And run: `echo "<TASK_SLUG>_COMPLETE" > .claude/.worker-done`
+
+If blocked and unable to continue:
+1. Write a BLOCKERS.md file: what you tried, what failed, what input or decision is needed
+2. Output: `<promise><TASK_SLUG>_BLOCKED</promise>`
+3. Run: `echo "<TASK_SLUG>_BLOCKED" > .claude/.worker-done`

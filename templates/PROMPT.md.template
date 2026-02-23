@@ -1,0 +1,79 @@
+# Worker Mission: <Task Name>
+
+You are a focused Claude Code agent. You have **one specific task** to complete as part
+of a parallel development effort. Other workers are handling different parts of the same
+codebase simultaneously — stay within your defined scope.
+
+---
+
+## Your Task Spec
+
+Read your complete spec now:
+
+@.swarm-specs/<task-slug>.md
+
+## Project Context
+
+@AGENT.md
+
+---
+
+## Working Protocol
+
+### Phase 1: Orient (do this first, before writing any code)
+
+1. Read your task spec completely (`@.swarm-specs/<task-slug>.md`)
+2. Read all files listed under **"Read for Patterns"** in your spec
+3. **Search before implementing** — check if anything already exists:
+   ```bash
+   grep -r "<relevant term>" src/ --include="*.ts" --include="*.tsx" -l
+   ```
+4. Understand how your output connects to the rest of the codebase
+
+### Phase 2: Implement
+
+1. Only touch files listed in your spec's **Scope** section
+2. Follow patterns from the reference files — don't invent new ones
+3. Keep changes small and incremental
+4. After each logical chunk of work, commit:
+   ```bash
+   git add <specific files>
+   git commit -m "feat: <what you did>"
+   ```
+
+### Phase 3: Verify
+
+1. Check for TypeScript errors if available: run the typecheck command from AGENT.md
+2. Verify each acceptance criterion in your spec is met
+3. Ensure no files outside your scope were modified: `git diff --name-only HEAD~1`
+
+### Phase 4: Complete
+
+When **all acceptance criteria** in your spec are satisfied:
+
+1. Write your completion file:
+   ```bash
+   echo "<TASK_SLUG>_COMPLETE" > .claude/.worker-done
+   ```
+2. Output exactly:
+   ```
+   <promise><TASK_SLUG>_COMPLETE</promise>
+   ```
+
+If you are **blocked** and cannot continue:
+
+1. Write `BLOCKERS.md` — include: what you tried, what failed, what decision or input is needed
+2. Write your blocked file:
+   ```bash
+   echo "<TASK_SLUG>_BLOCKED" > .claude/.worker-done
+   ```
+3. Output: `<promise><TASK_SLUG>_BLOCKED</promise>`
+
+---
+
+## Constraints
+
+- Do NOT modify files outside your spec's Scope section
+- Do NOT introduce new libraries without checking package.json first
+- Do NOT make design decisions — if something is unclear, document it in BLOCKERS.md
+- Do NOT modify files listed as Off-Limits in AGENT.md

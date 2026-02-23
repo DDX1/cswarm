@@ -1,0 +1,68 @@
+# Agent Instructions
+
+<!-- This file tells worker agents everything they need to operate autonomously. -->
+<!-- Keep it factual and concise — agents read this every iteration. -->
+
+## Project
+
+**Name**: <project-name>
+**Description**: <one-line description of what this app/service does>
+**Purpose**: <who uses it and what problem it solves>
+
+## Stack
+
+- **Framework**: <e.g., React Native + Expo SDK 54>
+- **Language**: TypeScript / JavaScript / Python / etc.
+- **Key Libraries**: <list 3-5 most important>
+- **Backend**: <Supabase / Firebase / custom REST API / none>
+- **Styling**: <Restyle / Tailwind / StyleSheet / styled-components>
+
+## Commands
+
+```bash
+# Install dependencies
+<install command, e.g., npm install>
+
+# Start development server
+<dev command, e.g., npm start or npm run dev>
+
+# Run tests (write "none configured" if not available)
+<test command>
+
+# Type-check (write "none configured" if not available)
+<typecheck command, e.g., npx tsc --noEmit>
+
+# Lint
+<lint command, e.g., npx eslint src/>
+```
+
+## Key Structure
+
+```
+<root>/
+├── <dir>/     — <what it contains>
+├── <dir>/     — <what it contains>
+├── <dir>/     — <what it contains>
+└── <dir>/     — <what it contains>
+```
+
+## Conventions
+
+- **File naming**: <e.g., PascalCase for components, camelCase for utilities>
+- **Component pattern**: <e.g., function components with named export>
+- **Imports**: <e.g., absolute paths from src/, barrel files via index.ts>
+- **State management**: <e.g., Zustand stores in src/store/, React Query for server state>
+- **Styling**: <e.g., useTheme() from @shopify/restyle, no inline styles>
+
+## Git
+
+- **Branch format**: `worker/<task-slug>` (e.g., `worker/auth-ui`)
+- **Commit format**: `<type>: <short description>` — types: feat, fix, refactor, style, chore
+- **Commit scope**: one logical change per commit; prefer small commits over large ones
+
+## Off-Limits
+
+Workers must **never** modify these files or directories:
+- `<path>` — <reason, e.g., "auto-generated, will be overwritten on next build">
+- `<path>` — <reason>
+- `package-lock.json` — only modify package.json and re-run install if a dependency is needed
