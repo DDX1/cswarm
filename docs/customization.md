@@ -71,6 +71,6 @@ Edit `skills/commit-msg/SKILL.md` to change the commit message format, conventio
 
 ## Global Claude config
 
-Your `~/.claude/CLAUDE.md` file contains instructions that apply to every Claude Code session. This is separate from Claude Swarm — the installer never overwrites it.
+Your `~/.claude/CLAUDE.md` file contains instructions that apply to every Claude Code session. This is separate from cswarm — the installer never overwrites it.
 
 See `config/CLAUDE.md.example` for suggested additions when using the swarm system.

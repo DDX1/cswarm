@@ -10,7 +10,7 @@ $ARGUMENTS
 
 Read `.swarm/state.json` and check the completion status of each worker:
 ```bash
-bash ~/.claude-swarm/scripts/worker-status.sh "<worktree-path>" "<task-slug>"
+bash ~/.cswarm/scripts/worker-status.sh "<worktree-path>" "<task-slug>"
 ```
 
 If none are complete, tell the user:

@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "SWARM_LINK=\"$HOME/.claude-swarm\"; if [ -n \"${CLAUDE_PLUGIN_ROOT:-}\" ] && [ -d \"${CLAUDE_PLUGIN_ROOT}\" ]; then if [ -L \"$SWARM_LINK\" ]; then CURRENT=$(readlink \"$SWARM_LINK\" 2>/dev/null); [ \"$CURRENT\" != \"${CLAUDE_PLUGIN_ROOT}\" ] && ln -sfn \"${CLAUDE_PLUGIN_ROOT}\" \"$SWARM_LINK\"; elif [ ! -e \"$SWARM_LINK\" ]; then ln -sfn \"${CLAUDE_PLUGIN_ROOT}\" \"$SWARM_LINK\"; fi; fi"
+            "command": "SWARM_LINK=\"$HOME/.cswarm\"; if [ -n \"${CLAUDE_PLUGIN_ROOT:-}\" ] && [ -d \"${CLAUDE_PLUGIN_ROOT}\" ]; then if [ -L \"$SWARM_LINK\" ]; then CURRENT=$(readlink \"$SWARM_LINK\" 2>/dev/null); [ \"$CURRENT\" != \"${CLAUDE_PLUGIN_ROOT}\" ] && ln -sfn \"${CLAUDE_PLUGIN_ROOT}\" \"$SWARM_LINK\"; elif [ ! -e \"$SWARM_LINK\" ]; then ln -sfn \"${CLAUDE_PLUGIN_ROOT}\" \"$SWARM_LINK\"; fi; fi"
           }
         ]
       }

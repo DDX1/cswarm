@@ -1,8 +1,8 @@
 #!/bin/bash
-# setup.sh — Install Claude Code Swarm infrastructure
+# setup.sh — Install cswarm infrastructure
 #
 # Run once after cloning or setting up on a new machine:
-#   bash ~/.claude-swarm/scripts/setup.sh
+#   bash ~/.cswarm/scripts/setup.sh
 
 set -euo pipefail
 
@@ -12,7 +12,7 @@ SWARM_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 COMMANDS_DIR="$HOME/.claude/commands"
 
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "  Claude Code Swarm — Setup"
+echo "  cswarm — setup"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo ""
 
@@ -69,10 +69,10 @@ echo ""
 echo "Verifying templates..."
 TEMPLATES=(AGENT.md.template spec.md.template PROMPT.md.template worker-settings.json)
 for tpl in "${TEMPLATES[@]}"; do
-  if [ -f "$SWARM_DIR/templates/$tpl" ]; then
+  if [ -f "$SWARM_ROOT/templates/$tpl" ]; then
     echo "  ✓ $tpl"
   else
-    echo "  ✗ $tpl  (missing: $SWARM_DIR/templates/$tpl)"
+    echo "  ✗ $tpl  (missing: $SWARM_ROOT/templates/$tpl)"
   fi
 done
 

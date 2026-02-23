@@ -26,7 +26,7 @@ WORKER_SETTINGS_FILE="$SWARM_ROOT/templates/worker-settings.json"
 PROJECT_PATH=$(cd "$PROJECT_PATH" && pwd)
 
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "  Claude Code Swarm Launcher"
+echo "  cswarm launcher"
 echo "  Project : $REPO_NAME"
 echo "  Workers : ${TASKS[*]}"
 echo "  Session : $SESSION"

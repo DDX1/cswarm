@@ -1,10 +1,10 @@
-# Claude Code — Commands & Skills Reference
+# cswarm — commands & skills reference
 
-Global slash commands and skills available in every Claude Code session on this machine.
+global slash commands and skills available in every claude code session.
 
 ---
 
-## Swarm Orchestration
+## ▸ swarm orchestration
 
 Divide large missions across parallel Claude workers using git worktrees + tmux.
 
@@ -19,7 +19,7 @@ Divide large missions across parallel Claude workers using git worktrees + tmux.
 | `/swarm-test` | *(none)* | Spawn a dedicated QA agent that opens the live app in a browser, verifies every merged spec's acceptance criteria at localhost:3000 (desktop) and localhost:8081 (mobile), and returns a pass/fail report |
 | `/swarm-commit` | *(none)* | Gather all commits from merged worker branches, group by task, and generate a single structured push-ready commit message summarising the entire mission |
 
-### Typical Swarm Workflow
+### typical workflow
 
 ```
 /swarm-init "Build the full vouchers and promotions feature"
@@ -38,23 +38,23 @@ Ctrl+B + d                  # detach (swarm keeps running)
 /swarm-stop                 # halt if workers still running
 ```
 
-### Swarm Infrastructure
+### infrastructure
 
 | File | Purpose |
 |------|---------|
-| `~/.claude-swarm/scripts/launch-swarm.sh` | Creates worktrees, configures stop hooks, opens tmux |
-| `~/.claude-swarm/scripts/ralph-stop-hook.sh` | Ralph loop engine — re-injects prompt until worker signals completion |
-| `~/.claude-swarm/scripts/worker-status.sh` | Parses git logs + state files to determine worker status |
-| `~/.claude-swarm/scripts/merge-workers.sh` | Clean `--no-ff` merge with conflict detection |
-| `~/.claude-swarm/scripts/setup.sh` | Re-run anytime to verify the full install |
-| `~/.claude-swarm/templates/AGENT.md.template` | Template for new project agent instructions |
-| `~/.claude-swarm/templates/spec.md.template` | Template for per-task spec files |
-| `~/.claude-swarm/templates/PROMPT.md.template` | Template for worker mission prompts |
-| `~/.claude-swarm/templates/worker-settings.json` | Stop hook config written into each worktree |
+| `~/.cswarm/scripts/launch-swarm.sh` | Creates worktrees, configures stop hooks, opens tmux |
+| `~/.cswarm/scripts/ralph-stop-hook.sh` | Ralph loop engine — re-injects prompt until worker signals completion |
+| `~/.cswarm/scripts/worker-status.sh` | Parses git logs + state files to determine worker status |
+| `~/.cswarm/scripts/merge-workers.sh` | Clean `--no-ff` merge with conflict detection |
+| `~/.cswarm/scripts/setup.sh` | Re-run anytime to verify the full install |
+| `~/.cswarm/templates/AGENT.md.template` | Template for new project agent instructions |
+| `~/.cswarm/templates/spec.md.template` | Template for per-task spec files |
+| `~/.cswarm/templates/PROMPT.md.template` | Template for worker mission prompts |
+| `~/.cswarm/templates/worker-settings.json` | Stop hook config written into each worktree |
 
 ---
 
-## Ralph Wiggum (Single-Session Loop)
+## ▸ ralph wiggum (single-session loop)
 
 Run a self-correcting Claude loop in the current session — no extra processes needed.
 Each iteration sees its own previous work and improves incrementally.
@@ -65,7 +65,7 @@ Each iteration sees its own previous work and improves incrementally.
 | `/cancel-ralph` | *(none)* | Cancel the active Ralph loop |
 | `/ralph-wiggum:help` | *(none)* | Explain the Ralph technique and show available commands |
 
-### Ralph Loop Examples
+### examples
 
 ```
 /ralph-loop "Fix the token refresh in auth.ts" --completion-promise "FIXED" --max-iterations 10
@@ -73,7 +73,7 @@ Each iteration sees its own previous work and improves incrementally.
 /cancel-ralph
 ```
 
-### How Ralph Works
+### how it works
 
 ```
 while task not complete:
@@ -89,7 +89,7 @@ Completion is signalled by Claude outputting: `<promise>YOUR_TEXT</promise>`
 
 ---
 
-## Utilities
+## ▸ utilities
 
 | Command | Arguments | Description |
 |---------|-----------|-------------|
@@ -98,16 +98,16 @@ Completion is signalled by Claude outputting: `<promise>YOUR_TEXT</promise>`
 
 ---
 
-## Notes
+## ▸ notes
 
 - **Slash commands** are `.md` files in `~/.claude/commands/` — edit them to tune behaviour
 - **Arguments** are passed as a string after the command name — quotes are optional
-- **Re-run setup** anytime: `bash ~/.claude-swarm/scripts/setup.sh`
+- **Re-run setup** anytime: `bash ~/.cswarm/scripts/setup.sh`
 - **Add a new command**: create `~/.claude/commands/my-command.md` — available immediately in all sessions
 
 ---
 
-## Further Reading
+## ▸ further reading
 
 - Ralph Wiggum technique: https://ghuntley.com/ralph/
 - Ralph Orchestrator (community): https://github.com/mikeyobrien/ralph-orchestrator

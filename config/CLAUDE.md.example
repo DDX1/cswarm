@@ -10,5 +10,5 @@ When using the swarm system:
 ## Notes
 
 - Slash commands are defined in `~/.claude/commands/` — edit them to tune behavior
-- Re-run setup anytime: `bash ~/.claude-swarm/scripts/setup.sh`
+- Re-run setup anytime: `bash ~/.cswarm/scripts/setup.sh`
 - Add a new command: create `~/.claude/commands/my-command.md` — available immediately

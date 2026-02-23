@@ -17,7 +17,7 @@
 
 **Solutions:**
 - Verify the stop hook is configured. Check `templates/worker-settings.json` contains the Stop hook entry pointing to `ralph-stop-hook.sh`
-- Ensure `scripts/ralph-stop-hook.sh` is executable: `chmod +x ~/.claude-swarm/scripts/ralph-stop-hook.sh`
+- Ensure `scripts/ralph-stop-hook.sh` is executable: `chmod +x ~/.cswarm/scripts/ralph-stop-hook.sh`
 - Check that `.claude/.ralph-worker-active` was written in the worktree
 
 ### Workers keep looping without progress
@@ -61,15 +61,15 @@
 **Symptoms:** Commands don't work after moving the repo.
 
 **Solutions:**
-- Run `~/.claude-swarm/install.sh --check` to see which links are broken
-- Re-run `~/.claude-swarm/install.sh` to fix them
-- If you moved the repo, the `~/.claude-swarm` convenience symlink needs updating
+- Run `~/.cswarm/install.sh --check` to see which links are broken
+- Re-run `~/.cswarm/install.sh` to fix them
+- If you moved the repo, the `~/.cswarm` symlink needs updating
 
 ## Diagnostics
 
 ### Verify installation
 ```bash
-~/.claude-swarm/install.sh --check
+~/.cswarm/install.sh --check
 ```
 
 ### Check tmux session
@@ -85,7 +85,7 @@ git worktree list
 
 ### Check a specific worker's state
 ```bash
-bash ~/.claude-swarm/scripts/worker-status.sh "../<repo>-worker-<slug>" "<slug>"
+bash ~/.cswarm/scripts/worker-status.sh "../<repo>-worker-<slug>" "<slug>"
 ```
 
 ### Check stop hook registration
@@ -97,6 +97,6 @@ cat <worktree>/.claude/settings.json
 
 Open an issue at the GitHub repository with:
 1. Your OS and version
-2. Output of `~/.claude-swarm/install.sh --check`
+2. Output of `~/.cswarm/install.sh --check`
 3. The error message or unexpected behavior
 4. Steps to reproduce

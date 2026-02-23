@@ -2,7 +2,7 @@
 
 ## Overview
 
-Claude Swarm orchestrates parallel Claude Code instances using three core technologies:
+cswarm orchestrates parallel Claude Code instances using three core technologies:
 - **Git worktrees** for file isolation
 - **tmux** for session management
 - **Ralph Wiggum stop hooks** for autonomous looping

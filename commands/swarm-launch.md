@@ -16,7 +16,7 @@ Run these checks and abort (with a helpful message) if any fail:
 3. Current directory is a git repository (`git status` succeeds)
 4. `tmux` is installed (`which tmux`)
 5. `claude` CLI is installed (`which claude`)
-6. `~/.claude-swarm/scripts/launch-swarm.sh` exists
+6. `~/.cswarm/scripts/launch-swarm.sh` exists
 7. Working tree is not mid-merge or mid-rebase (`git status` should be clean or have only untracked files)
 
 If the working tree has uncommitted changes to tracked files, ask:
@@ -83,7 +83,7 @@ Update `.swarm/state.json` to set status `"launching"` and record the worktree p
 Run the launch script:
 ```bash
 TASKS=$(ls .swarm/specs/*.md | xargs -I{} basename {} .md | tr '\n' ' ')
-bash ~/.claude-swarm/scripts/launch-swarm.sh "$(pwd)" "$TASKS"
+bash ~/.cswarm/scripts/launch-swarm.sh "$(pwd)" "$TASKS"
 ```
 
 The script will:

@@ -17,7 +17,7 @@ If the state file does not exist or `workers` is empty, tell the user:
 
 For each worker in the state file, run:
 ```bash
-bash ~/.claude-swarm/scripts/worker-status.sh "<worktree-path>" "<task-slug>"
+bash ~/.cswarm/scripts/worker-status.sh "<worktree-path>" "<task-slug>"
 ```
 
 Also check if the tmux session is running:

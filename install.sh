@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# install.sh — Install Claude Swarm into ~/.claude/
+# install.sh — Install cswarm into ~/.claude/
 #
 # Usage:
-#   git clone https://github.com/DDX1/claude-swarm.git ~/.claude-swarm && ~/.claude-swarm/install.sh
+#   git clone https://github.com/DDX1/cswarm.git ~/.cswarm && ~/.cswarm/install.sh
 #   ./install.sh              Install (with preview)
 #   ./install.sh --yes        Install without confirmation
 #   ./install.sh --check      Verify installation
-#   ./install.sh --uninstall  Remove Claude Swarm
+#   ./install.sh --uninstall  Remove cswarm
 
 set -euo pipefail
 
@@ -27,10 +27,13 @@ fail()    { printf "${RED}   fail${NC}  %s\n" "$1"; }
 step()    { printf "\n${BOLD}  %s${NC}\n" "$1"; }
 
 # ── Constants ────────────────────────────────────────────────────────────────
-REPO_URL="https://github.com/DDX1/claude-swarm.git"
-INSTALL_DIR="$HOME/.claude-swarm"
+REPO_URL="https://github.com/DDX1/cswarm.git"
+INSTALL_DIR="$HOME/.cswarm"
 CLAUDE_DIR="$HOME/.claude"
 BACKUP_DIR="$CLAUDE_DIR/backups/swarm-$(date +%Y%m%d-%H%M%S)"
+
+# Also clean up legacy paths from older versions
+LEGACY_DIR="$HOME/.claude-swarm"
 
 # ── What gets installed (single source of truth) ─────────────────────────────
 SWARM_COMMANDS=(swarm-init swarm-spec swarm-launch swarm-status swarm-merge swarm-stop swarm-test swarm-commit)
@@ -64,12 +67,10 @@ fi
 banner() {
   echo ""
   printf "${BOLD}"
-  echo "  ┌──────────────────────────────────────────┐"
-  echo "  │                                          │"
-  echo "  │          Claude Swarm v${VERSION}             │"
-  echo "  │   Parallel agents, one slash command.    │"
-  echo "  │                                          │"
-  echo "  └──────────────────────────────────────────┘"
+  echo "  ┌─────────────────────────────────────┐"
+  echo "  │  cswarm v${VERSION}                       │"
+  echo "  │  parallel agents, one slash command  │"
+  echo "  └─────────────────────────────────────┘"
   printf "${NC}"
   echo ""
 }
@@ -78,10 +79,10 @@ banner() {
 if [ "$MODE" = "help" ]; then
   banner
   echo "  Usage:"
-  echo "    install.sh              Install Claude Swarm (shows preview first)"
+  echo "    install.sh              Install cswarm (shows preview first)"
   echo "    install.sh --yes        Install without confirmation prompt"
   echo "    install.sh --check      Verify installation"
-  echo "    install.sh --uninstall  Remove Claude Swarm"
+  echo "    install.sh --uninstall  Remove cswarm"
   echo ""
   exit 0
 fi
@@ -89,7 +90,7 @@ fi
 # ── Uninstall ────────────────────────────────────────────────────────────────
 if [ "$MODE" = "uninstall" ]; then
   banner
-  step "Removing Claude Swarm..."
+  step "Removing cswarm..."
 
   REMOVED=0
 
@@ -113,6 +114,13 @@ if [ "$MODE" = "uninstall" ]; then
   done
   rmdir "$CLAUDE_DIR/swarm" 2>/dev/null || true
 
+  # Remove legacy ~/.claude-swarm symlink (v1.x path)
+  if [ -L "$LEGACY_DIR" ]; then
+    rm "$LEGACY_DIR"
+    ok "Removed legacy $LEGACY_DIR"
+    REMOVED=$((REMOVED + 1))
+  fi
+
   # Remove primary path symlink
   if [ -L "$INSTALL_DIR" ]; then
     rm "$INSTALL_DIR"
@@ -121,7 +129,7 @@ if [ "$MODE" = "uninstall" ]; then
   fi
 
   if [ $REMOVED -eq 0 ]; then
-    info "No Claude Swarm symlinks found. Nothing to remove."
+    info "No cswarm symlinks found. Nothing to remove."
   else
     ok "Removed $REMOVED symlinks."
   fi
@@ -139,7 +147,7 @@ if [ "$MODE" = "uninstall" ]; then
   fi
 
   echo ""
-  ok "Claude Swarm uninstalled. Project .swarm/ directories are untouched."
+  ok "cswarm uninstalled. Project .swarm/ directories are untouched."
   echo ""
   exit 0
 fi
@@ -155,7 +163,7 @@ if [ "$MODE" = "check" ]; then
   for cmd in "${SWARM_COMMANDS[@]}"; do
     target="$CLAUDE_DIR/commands/${cmd}.md"
     if [ -L "$target" ] && [ -e "$target" ]; then
-      ok "/$cmd → $(readlink "$target")"
+      ok "/$cmd -> $(readlink "$target")"
     elif [ -f "$target" ]; then
       warn "/$cmd exists but is not a symlink"
       ERRORS=$((ERRORS + 1))
@@ -167,11 +175,11 @@ if [ "$MODE" = "check" ]; then
 
   # Check primary path symlink
   if [ -L "$INSTALL_DIR" ] && [ -e "$INSTALL_DIR" ]; then
-    ok "~/.claude-swarm → $(readlink "$INSTALL_DIR")"
+    ok "~/.cswarm -> $(readlink "$INSTALL_DIR")"
   elif [ -d "$INSTALL_DIR" ]; then
-    ok "~/.claude-swarm (directory)"
+    ok "~/.cswarm (directory)"
   else
-    fail "~/.claude-swarm not found — scripts and templates won't be found"
+    fail "~/.cswarm not found — scripts and templates won't be found"
     ERRORS=$((ERRORS + 1))
   fi
 
@@ -213,10 +221,10 @@ for tool in git tmux claude; do
     ok "$tool ($(command -v "$tool"))"
   else
     case "$tool" in
-      git)    warn "$tool not found → xcode-select --install (macOS) or apt install git" ;;
+      git)    warn "$tool not found -> xcode-select --install (macOS) or apt install git" ;;
       tmux)   warn "$tool not found — required for /swarm-launch"
               TMUX_MISSING=1 ;;
-      claude) warn "$tool not found → npm install -g @anthropic-ai/claude-code" ;;
+      claude) warn "$tool not found -> npm install -g @anthropic-ai/claude-code" ;;
     esac
     PREREQ_OK=0
   fi
@@ -266,7 +274,7 @@ if [ "$SOURCE_DIR" = "$INSTALL_DIR" ]; then
     cd "$INSTALL_DIR" && git pull --quiet
     ok "Updated to latest version"
   else
-    info "Cloning claude-swarm..."
+    info "Cloning cswarm..."
     git clone --quiet "$REPO_URL" "$INSTALL_DIR"
     ok "Cloned to $INSTALL_DIR"
   fi
@@ -305,7 +313,7 @@ for cmd in "${SWARM_COMMANDS[@]}"; do
 done
 
 if [ "$SOURCE_DIR" != "$INSTALL_DIR" ] && [ ! -L "$INSTALL_DIR" ]; then
-  printf "    ${GREEN}+${NC} ~/.claude-swarm → $SOURCE_DIR  ${DIM}(primary path — required)${NC}\n"
+  printf "    ${GREEN}+${NC} ~/.cswarm -> $SOURCE_DIR  ${DIM}(primary path — required)${NC}\n"
   WILL_CREATE=$((WILL_CREATE + 1))
 fi
 
@@ -321,8 +329,8 @@ if [ $WILL_BACKUP -gt 0 ]; then
 fi
 
 printf "  ${BOLD}Not installed${NC} ${DIM}(available in repo if you want them):${NC}\n"
-printf "    ${DIM}○${NC} skills/commit-msg  ${DIM}— run: ln -sfn $SOURCE_DIR/skills/commit-msg ~/.claude/skills/commit-msg${NC}\n"
-printf "    ${DIM}○${NC} config/COMMANDS.md ${DIM}— command reference doc${NC}\n"
+printf "    ${DIM}o${NC} skills/commit-msg  ${DIM}— run: ln -sfn $SOURCE_DIR/skills/commit-msg ~/.claude/skills/commit-msg${NC}\n"
+printf "    ${DIM}o${NC} config/COMMANDS.md ${DIM}— command reference doc${NC}\n"
 echo ""
 
 # Ask for confirmation unless --yes
@@ -395,10 +403,16 @@ for cmd in "${SWARM_COMMANDS[@]}"; do
   create_link "$SOURCE_DIR/commands/${cmd}.md" "$CLAUDE_DIR/commands/${cmd}.md" "/$cmd"
 done
 
-# Primary path symlink ~/.claude-swarm → source dir (required for swarm operations)
+# Primary path symlink ~/.cswarm -> source dir (required for swarm operations)
 if [ "$SOURCE_DIR" != "$INSTALL_DIR" ]; then
   ln -sfn "$SOURCE_DIR" "$INSTALL_DIR"
-  ok "~/.claude-swarm → $SOURCE_DIR"
+  ok "~/.cswarm -> $SOURCE_DIR"
+fi
+
+# Clean up legacy ~/.claude-swarm symlink if it exists
+if [ -L "$LEGACY_DIR" ]; then
+  rm "$LEGACY_DIR"
+  ok "Removed legacy ~/.claude-swarm symlink"
 fi
 
 if [ $SKIPPED -gt 0 ]; then
@@ -433,11 +447,11 @@ for cmd in "${SWARM_COMMANDS[@]}"; do
 done
 
 if [ -L "$INSTALL_DIR" ] && [ -e "$INSTALL_DIR" ]; then
-  ok "~/.claude-swarm → $(readlink "$INSTALL_DIR")"
+  ok "~/.cswarm -> $(readlink "$INSTALL_DIR")"
 elif [ -d "$INSTALL_DIR" ]; then
-  ok "~/.claude-swarm"
+  ok "~/.cswarm"
 else
-  fail "~/.claude-swarm — not found"
+  fail "~/.cswarm — not found"
   VERIFY_OK=0
 fi
 
@@ -445,29 +459,21 @@ fi
 echo ""
 if [ $VERIFY_OK -eq 1 ]; then
   printf "${BOLD}${GREEN}"
-  echo "  ┌──────────────────────────────────────────────────┐"
-  echo "  │                                                  │"
-  echo "  │          Claude Swarm installed! ✓               │"
-  echo "  │                                                  │"
-  echo "  ├──────────────────────────────────────────────────┤"
-  echo "  │                                                  │"
-  echo "  │  Quick start:                                    │"
-  echo "  │    1. Open any project in Claude Code            │"
-  echo "  │    2. /swarm-init \"your mission\"                 │"
-  echo "  │    3. /swarm-spec                                │"
-  echo "  │    4. /swarm-launch                              │"
-  echo "  │                                                  │"
-  echo "  ├──────────────────────────────────────────────────┤"
-  echo "  │                                                  │"
-  echo "  │  Update:   cd ~/.claude-swarm && git pull        │"
-  echo "  │  Verify:   ~/.claude-swarm/install.sh --check    │"
-  echo "  │  Remove:   ~/.claude-swarm/install.sh --uninstall│"
-  echo "  │                                                  │"
-  echo "  │  Extras:                                         │"
-  echo "  │   commit skill: see README for opt-in install    │"
-  echo "  │   command ref:  cat ~/.claude-swarm/config/COMMANDS.md│"
-  echo "  │                                                  │"
-  echo "  └──────────────────────────────────────────────────┘"
+  echo "  ┌──────────────────────────────────────────┐"
+  echo "  │                                          │"
+  echo "  │  cswarm installed                        │"
+  echo "  │                                          │"
+  echo "  │  quick start:                            │"
+  echo "  │    1. open any project in claude code    │"
+  echo "  │    2. /swarm-init \"your mission\"         │"
+  echo "  │    3. /swarm-spec                        │"
+  echo "  │    4. /swarm-launch                      │"
+  echo "  │                                          │"
+  echo "  │  update:  cd ~/.cswarm && git pull       │"
+  echo "  │  verify:  ~/.cswarm/install.sh --check   │"
+  echo "  │  remove:  ~/.cswarm/install.sh --uninstall│"
+  echo "  │                                          │"
+  echo "  └──────────────────────────────────────────┘"
   printf "${NC}"
 else
   fail "Installation completed with errors. Run with --check for details."

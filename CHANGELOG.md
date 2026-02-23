@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [2.0.0] - 2026-02-23
+
+### Changed
+
+- **BREAKING:** Renamed project from `claude-swarm` to `cswarm`
+- **BREAKING:** Canonical install path changed from `~/.claude-swarm` to `~/.cswarm`
+- GitHub repo moved to `DDX1/cswarm` (old URL auto-redirects)
+- Plugin name changed to `cswarm` (`claude plugin install cswarm`)
+- All script, template, and hook paths updated to `~/.cswarm/`
+- Installer cleans up legacy `~/.claude-swarm` symlinks automatically
+
 ## [1.1.0] - 2026-02-23
 
 ### Added
