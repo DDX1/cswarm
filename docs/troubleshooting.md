@@ -17,7 +17,7 @@
 
 **Solutions:**
 - Verify the stop hook is configured. Check `templates/worker-settings.json` contains the Stop hook entry pointing to `ralph-stop-hook.sh`
-- Ensure `scripts/ralph-stop-hook.sh` is executable: `chmod +x ~/.claude/swarm/scripts/ralph-stop-hook.sh`
+- Ensure `scripts/ralph-stop-hook.sh` is executable: `chmod +x ~/.claude-swarm/scripts/ralph-stop-hook.sh`
 - Check that `.claude/.ralph-worker-active` was written in the worktree
 
 ### Workers keep looping without progress
@@ -85,7 +85,7 @@ git worktree list
 
 ### Check a specific worker's state
 ```bash
-bash ~/.claude/swarm/scripts/worker-status.sh "../<repo>-worker-<slug>" "<slug>"
+bash ~/.claude-swarm/scripts/worker-status.sh "../<repo>-worker-<slug>" "<slug>"
 ```
 
 ### Check stop hook registration

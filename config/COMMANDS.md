@@ -42,15 +42,15 @@ Ctrl+B + d                  # detach (swarm keeps running)
 
 | File | Purpose |
 |------|---------|
-| `~/.claude/swarm/scripts/launch-swarm.sh` | Creates worktrees, configures stop hooks, opens tmux |
-| `~/.claude/swarm/scripts/ralph-stop-hook.sh` | Ralph loop engine — re-injects prompt until worker signals completion |
-| `~/.claude/swarm/scripts/worker-status.sh` | Parses git logs + state files to determine worker status |
-| `~/.claude/swarm/scripts/merge-workers.sh` | Clean `--no-ff` merge with conflict detection |
-| `~/.claude/swarm/scripts/setup.sh` | Re-run anytime to verify the full install |
-| `~/.claude/swarm/templates/AGENT.md.template` | Template for new project agent instructions |
-| `~/.claude/swarm/templates/spec.md.template` | Template for per-task spec files |
-| `~/.claude/swarm/templates/PROMPT.md.template` | Template for worker mission prompts |
-| `~/.claude/swarm/templates/worker-settings.json` | Stop hook config written into each worktree |
+| `~/.claude-swarm/scripts/launch-swarm.sh` | Creates worktrees, configures stop hooks, opens tmux |
+| `~/.claude-swarm/scripts/ralph-stop-hook.sh` | Ralph loop engine — re-injects prompt until worker signals completion |
+| `~/.claude-swarm/scripts/worker-status.sh` | Parses git logs + state files to determine worker status |
+| `~/.claude-swarm/scripts/merge-workers.sh` | Clean `--no-ff` merge with conflict detection |
+| `~/.claude-swarm/scripts/setup.sh` | Re-run anytime to verify the full install |
+| `~/.claude-swarm/templates/AGENT.md.template` | Template for new project agent instructions |
+| `~/.claude-swarm/templates/spec.md.template` | Template for per-task spec files |
+| `~/.claude-swarm/templates/PROMPT.md.template` | Template for worker mission prompts |
+| `~/.claude-swarm/templates/worker-settings.json` | Stop hook config written into each worktree |
 
 ---
 
@@ -102,7 +102,7 @@ Completion is signalled by Claude outputting: `<promise>YOUR_TEXT</promise>`
 
 - **Slash commands** are `.md` files in `~/.claude/commands/` — edit them to tune behaviour
 - **Arguments** are passed as a string after the command name — quotes are optional
-- **Re-run setup** anytime: `bash ~/.claude/swarm/scripts/setup.sh`
+- **Re-run setup** anytime: `bash ~/.claude-swarm/scripts/setup.sh`
 - **Add a new command**: create `~/.claude/commands/my-command.md` — available immediately in all sessions
 
 ---

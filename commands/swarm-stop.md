@@ -36,7 +36,7 @@ Update `.swarm/state.json`:
 
 For each stopped worker, check how far they got:
 ```bash
-bash ~/.claude/swarm/scripts/worker-status.sh "<worktree-path>" "<task-slug>"
+bash ~/.claude-swarm/scripts/worker-status.sh "<worktree-path>" "<task-slug>"
 ```
 
 Show:

@@ -2,11 +2,13 @@
 # setup.sh — Install Claude Code Swarm infrastructure
 #
 # Run once after cloning or setting up on a new machine:
-#   bash ~/.claude/swarm/scripts/setup.sh
+#   bash ~/.claude-swarm/scripts/setup.sh
 
 set -euo pipefail
 
-SWARM_DIR="$HOME/.claude/swarm"
+# ── Resolve swarm root via BASH_SOURCE ────────────────────────────────────────
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SWARM_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 COMMANDS_DIR="$HOME/.claude/commands"
 
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
@@ -41,7 +43,7 @@ echo ""
 
 # ── Make scripts executable ───────────────────────────────────────────────
 echo "Making scripts executable..."
-for script in "$SWARM_DIR"/scripts/*.sh; do
+for script in "$SWARM_ROOT"/scripts/*.sh; do
   if [ -f "$script" ]; then
     chmod +x "$script"
     echo "  ✓ $(basename "$script")"

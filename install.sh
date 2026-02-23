@@ -103,16 +103,17 @@ if [ "$MODE" = "uninstall" ]; then
     fi
   done
 
-  # Remove directory symlinks
+  # Remove legacy directory symlinks (pre-v1.1.0 install locations)
   for link in "$CLAUDE_DIR/swarm/scripts" "$CLAUDE_DIR/swarm/templates"; do
     if [ -L "$link" ]; then
       rm "$link"
-      ok "Removed $link"
+      ok "Removed legacy $link"
       REMOVED=$((REMOVED + 1))
     fi
   done
+  rmdir "$CLAUDE_DIR/swarm" 2>/dev/null || true
 
-  # Remove convenience symlink
+  # Remove primary path symlink
   if [ -L "$INSTALL_DIR" ]; then
     rm "$INSTALL_DIR"
     ok "Removed $INSTALL_DIR"
@@ -164,15 +165,15 @@ if [ "$MODE" = "check" ]; then
     fi
   done
 
-  # Check directory symlinks
-  for link in "$CLAUDE_DIR/swarm/scripts" "$CLAUDE_DIR/swarm/templates"; do
-    if [ -L "$link" ] && [ -e "$link" ]; then
-      ok "$(basename "$(dirname "$link")")/$(basename "$link") → $(readlink "$link")"
-    else
-      fail "$link not found or broken"
-      ERRORS=$((ERRORS + 1))
-    fi
-  done
+  # Check primary path symlink
+  if [ -L "$INSTALL_DIR" ] && [ -e "$INSTALL_DIR" ]; then
+    ok "~/.claude-swarm → $(readlink "$INSTALL_DIR")"
+  elif [ -d "$INSTALL_DIR" ]; then
+    ok "~/.claude-swarm (directory)"
+  else
+    fail "~/.claude-swarm not found — scripts and templates won't be found"
+    ERRORS=$((ERRORS + 1))
+  fi
 
   # Check prerequisites
   echo ""
@@ -303,25 +304,8 @@ for cmd in "${SWARM_COMMANDS[@]}"; do
   fi
 done
 
-for pair in "scripts:swarm/scripts" "templates:swarm/templates"; do
-  src_name="${pair%%:*}"
-  dst_rel="${pair##*:}"
-  target="$CLAUDE_DIR/$dst_rel"
-  src="$SOURCE_DIR/$src_name"
-  if [ -L "$target" ] && [ "$(readlink "$target")" = "$src" ]; then
-    ALREADY_OK=$((ALREADY_OK + 1))
-  elif [ -e "$target" ] && [ ! -L "$target" ]; then
-    printf "    ${YELLOW}~${NC} ${dst_rel}/  ${DIM}(existing dir will be backed up)${NC}\n"
-    WILL_BACKUP=$((WILL_BACKUP + 1))
-    WILL_CREATE=$((WILL_CREATE + 1))
-  else
-    printf "    ${GREEN}+${NC} ${dst_rel}/\n"
-    WILL_CREATE=$((WILL_CREATE + 1))
-  fi
-done
-
 if [ "$SOURCE_DIR" != "$INSTALL_DIR" ] && [ ! -L "$INSTALL_DIR" ]; then
-  printf "    ${GREEN}+${NC} ~/.claude-swarm → $SOURCE_DIR  ${DIM}(convenience symlink)${NC}\n"
+  printf "    ${GREEN}+${NC} ~/.claude-swarm → $SOURCE_DIR  ${DIM}(primary path — required)${NC}\n"
   WILL_CREATE=$((WILL_CREATE + 1))
 fi
 
@@ -360,7 +344,6 @@ fi
 
 # ── Step 4: Create target directories ───────────────────────────────────────
 mkdir -p "$CLAUDE_DIR/commands"
-mkdir -p "$CLAUDE_DIR/swarm"
 
 # ── Step 5: Backup existing files ───────────────────────────────────────────
 BACKED_UP=0
@@ -381,9 +364,6 @@ backup_if_real() {
 for cmd in "${SWARM_COMMANDS[@]}"; do
   backup_if_real "$CLAUDE_DIR/commands/${cmd}.md"
 done
-backup_if_real "$CLAUDE_DIR/swarm/scripts"
-backup_if_real "$CLAUDE_DIR/swarm/templates"
-
 # ── Step 6: Create symlinks ─────────────────────────────────────────────────
 step "Installing..."
 
@@ -415,11 +395,7 @@ for cmd in "${SWARM_COMMANDS[@]}"; do
   create_link "$SOURCE_DIR/commands/${cmd}.md" "$CLAUDE_DIR/commands/${cmd}.md" "/$cmd"
 done
 
-# Directory symlinks for scripts and templates
-create_link "$SOURCE_DIR/scripts"   "$CLAUDE_DIR/swarm/scripts"   "swarm/scripts/"
-create_link "$SOURCE_DIR/templates" "$CLAUDE_DIR/swarm/templates" "swarm/templates/"
-
-# Convenience symlink ~/.claude-swarm → source dir (for updates and uninstall)
+# Primary path symlink ~/.claude-swarm → source dir (required for swarm operations)
 if [ "$SOURCE_DIR" != "$INSTALL_DIR" ]; then
   ln -sfn "$SOURCE_DIR" "$INSTALL_DIR"
   ok "~/.claude-swarm → $SOURCE_DIR"
@@ -456,15 +432,14 @@ for cmd in "${SWARM_COMMANDS[@]}"; do
   fi
 done
 
-for link in "$CLAUDE_DIR/swarm/scripts" "$CLAUDE_DIR/swarm/templates"; do
-  name="$(basename "$(dirname "$link")")/$(basename "$link")"
-  if [ -L "$link" ] && [ -e "$link" ]; then
-    ok "$name"
-  else
-    fail "$name — symlink broken"
-    VERIFY_OK=0
-  fi
-done
+if [ -L "$INSTALL_DIR" ] && [ -e "$INSTALL_DIR" ]; then
+  ok "~/.claude-swarm → $(readlink "$INSTALL_DIR")"
+elif [ -d "$INSTALL_DIR" ]; then
+  ok "~/.claude-swarm"
+else
+  fail "~/.claude-swarm — not found"
+  VERIFY_OK=0
+fi
 
 # ── Done ─────────────────────────────────────────────────────────────────────
 echo ""

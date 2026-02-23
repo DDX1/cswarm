@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash ~/.claude/swarm/scripts/ralph-stop-hook.sh"
+            "command": "bash ~/.claude-swarm/scripts/ralph-stop-hook.sh"
           }
         ]
       }

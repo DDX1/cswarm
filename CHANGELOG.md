@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.1.0] - 2026-02-23
+
+### Added
+
+- Native Claude Code plugin support (`claude plugin install claude-swarm`)
+- `.claude-plugin/plugin.json` manifest and marketplace config
+- `hooks/hooks.json` — SessionStart hook auto-creates `~/.claude-swarm` symlink in plugin mode
+- Scripts now self-discover their root via `BASH_SOURCE` (install-method agnostic)
+
+### Changed
+
+- All script/template paths now use `~/.claude-swarm/` as the canonical root (was `~/.claude/swarm/`)
+- `install.sh` no longer creates `~/.claude/swarm/scripts` or `~/.claude/swarm/templates` symlinks
+- `~/.claude-swarm` symlink promoted from convenience to required path
+- Uninstall mode cleans up legacy `~/.claude/swarm/` symlinks from v1.0.0
+
 ## [1.0.0] - 2026-02-23
 
 ### Added

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "DDX1 Claude Plugins",
+  "description": "Claude Code plugins by DDX1",
+  "owner": {
+    "name": "DDX1"
+  },
+  "plugins": [
+    {
+      "name": "claude-swarm",
+      "description": "Parallel Claude Code agents orchestrated through slash commands",
+      "source": ".",
+      "version": "1.1.0",
+      "category": "development"
+    }
+  ]
+}

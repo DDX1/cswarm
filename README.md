@@ -42,13 +42,22 @@ Each worker is an isolated Claude Code instance running in its own **git worktre
 
 ## Install
 
-**One-liner:**
+### Option A: Claude Code Plugin (recommended)
+
+```bash
+claude plugin marketplace add DDX1/claude-swarm
+claude plugin install claude-swarm
+```
+
+Commands, skills, and hooks are loaded automatically. Start a new Claude Code session for the `~/.claude-swarm` path to be configured.
+
+### Option B: Manual Install
 
 ```bash
 git clone https://github.com/DDX1/claude-swarm.git ~/.claude-swarm && ~/.claude-swarm/install.sh
 ```
 
-**Or from a local clone:**
+Or from a local clone:
 
 ```bash
 git clone https://github.com/DDX1/claude-swarm.git ~/projects/claude-swarm
@@ -170,23 +179,28 @@ graph TD
 
 ```
 claude-swarm/
+├── .claude-plugin/    Plugin manifest + marketplace config
 ├── commands/          8 slash commands (.md files)
 ├── scripts/           5 bash orchestration scripts
 ├── templates/         4 worker configuration templates
+├── hooks/             SessionStart hook (plugin mode)
 ├── skills/            commit-msg skill
 ├── config/            COMMANDS.md reference, CLAUDE.md example
 ├── docs/              Architecture, customization, troubleshooting
-├── install.sh         Installer (symlinks into ~/.claude/)
+├── install.sh         Manual installer (symlinks into ~/.claude/)
 └── uninstall.sh       Clean removal
 ```
 
 ### What gets installed where
 
+**Plugin install:** commands, skills, and hooks are loaded automatically from the plugin cache. A `~/.claude-swarm` symlink is created on first session to provide script/template access.
+
+**Manual install:**
+
 | Repo source | Symlinked to | Notes |
 |---|---|---|
 | `commands/swarm-*.md` | `~/.claude/commands/` | One symlink per file. Only `swarm-` prefixed — won't touch your other commands. |
-| `scripts/` | `~/.claude/swarm/scripts` | Directory symlink |
-| `templates/` | `~/.claude/swarm/templates` | Directory symlink |
+| repo root | `~/.claude-swarm` | Primary path — scripts and templates are accessed through here |
 
 **Not auto-installed:** `skills/commit-msg/`, `config/COMMANDS.md` — see [Optional extras](#optional-extras-not-auto-installed).
 
@@ -225,7 +239,7 @@ Commands are markdown files — edit them to change behavior. Templates control 
 | Problem | Solution |
 |---------|----------|
 | tmux session won't start | Check `tmux` is installed and no existing `swarm` session: `tmux kill-session -t swarm` |
-| Workers stop immediately | The Ralph stop hook must be configured. Check `~/.claude/swarm/templates/worker-settings.json` |
+| Workers stop immediately | The Ralph stop hook must be configured. Check `~/.claude-swarm/templates/worker-settings.json` |
 | Merge conflicts | Expected when workers touch overlapping files. Redesign your task breakdown for better isolation. |
 
 See [docs/troubleshooting.md](docs/troubleshooting.md) for more.

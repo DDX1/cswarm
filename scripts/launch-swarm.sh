@@ -16,7 +16,11 @@ IFS=' ' read -ra TASKS <<< "$TASKS_STRING"
 
 REPO_NAME=$(basename "$PROJECT_PATH")
 SESSION="swarm"
-WORKER_SETTINGS_FILE="$HOME/.claude/swarm/templates/worker-settings.json"
+
+# ── Resolve swarm root via BASH_SOURCE ────────────────────────────────────────
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SWARM_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+WORKER_SETTINGS_FILE="$SWARM_ROOT/templates/worker-settings.json"
 
 # Resolve absolute path
 PROJECT_PATH=$(cd "$PROJECT_PATH" && pwd)
@@ -38,7 +42,7 @@ if ! command -v claude &>/dev/null; then
 fi
 if [ ! -f "$WORKER_SETTINGS_FILE" ]; then
   echo "✗ Worker settings template not found at $WORKER_SETTINGS_FILE"
-  echo "  Run the setup script: bash ~/.claude/swarm/scripts/setup.sh" && exit 1
+  echo "  Run the setup script: bash $SCRIPT_DIR/setup.sh" && exit 1
 fi
 
 # ── Kill any existing swarm session ────────────────────────────────────────
