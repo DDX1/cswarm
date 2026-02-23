@@ -93,6 +93,26 @@ bash ~/.cswarm/scripts/worker-status.sh "../<repo>-worker-<slug>" "<slug>"
 cat <worktree>/.claude/settings.json
 ```
 
+## Windows
+
+cswarm requires bash, tmux, and symlinks — none are available natively on Windows.
+
+**Use WSL (Windows Subsystem for Linux):**
+
+```bash
+# install WSL if you haven't already
+wsl --install
+
+# inside WSL, install prerequisites
+sudo apt install git tmux
+npm install -g @anthropic-ai/claude-code
+
+# then install cswarm normally
+git clone https://github.com/DDX1/cswarm.git ~/.cswarm && ~/.cswarm/install.sh
+```
+
+Run `claude` from inside WSL. The swarm commands, tmux sessions, and worktrees all work unchanged in the WSL environment.
+
 ## Getting help
 
 Open an issue at the GitHub repository with:

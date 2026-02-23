@@ -78,9 +78,10 @@ the installer previews what it will do, asks once, then symlinks into `~/.claude
 ### prerequisites
 
 ```
-  git     xcode-select --install (macOS) / apt install git
-  tmux    brew install tmux (macOS) / apt install tmux
-  claude  npm install -g @anthropic-ai/claude-code
+  platform  macOS or Linux (Windows requires WSL)
+  git       xcode-select --install (macOS) / apt install git
+  tmux      brew install tmux (macOS) / apt install tmux
+  claude    npm install -g @anthropic-ai/claude-code
 ```
 
 ---
@@ -182,6 +183,46 @@ $ tmux attach -t swarm
 
 ---
 
+## ▸ worker isolation
+
+workers are **fully isolated** at runtime — no shared context, no communication, no side effects.
+
+```
+  ┌─────────────────────────────────────────────────────────────┐
+  │  worker 1 (auth)              worker 2 (dashboard)          │
+  │  ├── own git worktree         ├── own git worktree          │
+  │  ├── own branch               ├── own branch                │
+  │  ├── own Claude instance      ├── own Claude instance       │
+  │  ├── own .claude/ state       ├── own .claude/ state        │
+  │  └── cannot see worker 2      └── cannot see worker 1       │
+  └─────────────────────────────────────────────────────────────┘
+```
+
+**what each worker gets at launch** (copies, not shared refs):
+
+```
+  PROMPT.md              task-specific mission prompt
+  AGENT.md               project context (stack, conventions, structure)
+  .swarm-specs/*.md      all specs (read-only reference)
+  full project files     from the base branch via git worktree
+```
+
+**what workers cannot see:**
+
+- other workers' commits (different branches, different worktrees)
+- other workers' file changes
+- other workers' progress or status
+
+**how conflicts are prevented:**
+
+- each spec declares its file scope: files to create, modify, read, never touch
+- `/swarm-spec` validates that no two workers modify the same file
+- if scopes overlap, you get merge conflicts during `/swarm-merge` — redesign the task breakdown
+
+**coordination is spec-based, not runtime.** workers discover each other's results only after `/swarm-merge` integrates branches back.
+
+---
+
 ## ▸ repo structure
 
 ```
@@ -248,6 +289,18 @@ commands are markdown files — edit them to change behavior. templates control 
 ```
 
 see [docs/troubleshooting.md](docs/troubleshooting.md) for full diagnostics.
+
+---
+
+## ▸ platform support
+
+```
+  macOS     ✓  fully supported
+  Linux     ✓  fully supported
+  Windows   ✗  requires WSL (Windows Subsystem for Linux)
+```
+
+cswarm depends on **bash**, **tmux**, and **symlinks** — none are available natively on Windows. install and run inside WSL and everything works unchanged.
 
 ---
 
